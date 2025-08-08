@@ -1,28 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Order</title>
+  <meta charset="UTF-8">
+  <title>Add Product</title>
+  <style>
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .preview-image-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .preview-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const expiryRequired = new Set([
+        "Beauty & Personal Care > Fragrances > Perfume",
+        "Beauty & Personal Care > Hair Care > Shampoos",
+        "Beauty & Personal Care > Hair Care > Styling",
+        "Beauty & Personal Care > Makeup > Eyes",
+        "Beauty & Personal Care > Makeup > Lips",
+        "Beauty & Personal Care > Skincare > Moisturizers",
+        "Beauty & Personal Care > Skincare > Serums",
+        "Food > Breads > Naan",
+        "Food > Breads > Paratha",
+        "Food > Breads > Puri",
+        "Food > Chinese > Chow Mein",
+        "Food > Chinese > Fried Rice",
+        "Food > Chinese > Manchurian",
+        "Food > Desserts > Gulab Jamun",
+        "Food > Desserts > Ice Cream",
+        "Food > Desserts > Rasgulla",
+        "Food > North Indian > Dal Tadka",
+        "Food > North Indian > Paneer Butter Masala",
+        "Food > North Indian > Rajma Chawal",
+        "Food > Snacks & Street Food > Chaat",
+        "Food > Snacks & Street Food > Pakora",
+        "Food > Snacks & Street Food > Samosa",
+        "Food > South Indian > Dosa",
+        "Food > South Indian > Idli",
+        "Food > South Indian > Medu Vada",
+        "Food > South Indian > Upma",
+        "Food > Thali > Combo Meals",
+        "Food > Thali > Mini Thali",
+        "Food > Thali > Veg Thali",
+        "Food > Beverages > Lassi",
+        "Food > Beverages > Masala Chai",
+        "Food > Beverages > Soft Drinks",
+        "Food > Beverages > Tea & Coffee",
+        "Grocery > Beverages > Juices",
+        "Grocery > Beverages > Soft Drinks",
+        "Grocery > Beverages > Tea & Coffee",
+        "Grocery > Breakfast Items > Cereals",
+        "Grocery > Breakfast Items > Jam & Spreads",
+        "Grocery > Breakfast Items > Oats & Muesli",
+        "Grocery > Canned & Packaged Food > Canned Vegetables",
+        "Grocery > Canned & Packaged Food > Instant Noodles",
+        "Grocery > Canned & Packaged Food > Ready to Eat Meals",
+        "Grocery > Dairy > Butter & Cheese",
+        "Grocery > Dairy > Milk",
+        "Grocery > Dairy > Yogurt & Curd",
+        "Grocery > Food Staples > Atta, Flour & Sooji",
+        "Grocery > Food Staples > Lentils & Pulses",
+        "Grocery > Food Staples > Oil & Ghee",
+        "Grocery > Food Staples > Rice & Grains",
+        "Grocery > Food Staples > Salt, Sugar & Jaggery",
+        "Grocery > Organic Products",
+        "Grocery > Snacks > Biscuits & Cookies",
+        "Grocery > Snacks > Chips & Crackers",
+        "Grocery > Snacks > Chocolates",
+        "Grocery > Snacks > Dry Fruits & Nuts",
+        "Grocery > Spices & Masalas",
+        "Grocery > Staples > Baking Essentials",
+        "Grocery > Personal Care > Bath & Body",
+        "Grocery > Personal Care > Oral Care",
+        "Grocery > Personal Care > Sanitary Needs",
+        "Grocery > Household Supplies > Cleaning Tools",
+        "Grocery > Household Supplies > Detergents",
+        "Grocery > Household Supplies > Dishwashing",
+        "Grocery > Household Supplies > Paper & Disposables",
+        "Pet Supplies > Cats > Food",
+        "Pet Supplies > Cats > Litter",
+        "Pet Supplies > Dogs > Food",
+        "Toys & Baby Products > Diapers & Wipes",
+        "Toys & Baby Products > Feeding > Bottles"
+      ]);
+
+      const categorySelect = document.querySelector("select[name='category']");
+      const expiryDiv = document.getElementById("expiryDiv");
+
+      function toggleExpiryField() {
+        const selected = categorySelect.value;
+        if (expiryRequired.has(selected)) {
+          expiryDiv.style.display = "block";
+        } else {
+          expiryDiv.style.display = "none";
+          document.querySelector("input[name='expiry_date']").value = "";
+        }
+      }
+
+      categorySelect.addEventListener("change", toggleExpiryField);
+      toggleExpiryField();
+
+      const fileInput = document.querySelector("input[name='images']");
+      const previewContainer = document.getElementById("imagePreview");
+      let imageFiles = [];
+
+      fileInput.addEventListener("change", (e) => {
+        const newFiles = Array.from(e.target.files);
+        const total = imageFiles.length + newFiles.length;
+
+        if (total > 5) {
+          alert("You can upload a maximum of 5 images.");
+          fileInput.value = "";
+          return;
+        }
+
+        newFiles.forEach((file) => {
+          imageFiles.push(file);
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "preview-image-wrapper";
+
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.className = "preview-image";
+
+            const removeBtn = document.createElement("button");
+            removeBtn.textContent = "×";
+            removeBtn.className = "remove-btn";
+
+            removeBtn.onclick = () => {
+              const index = imageFiles.indexOf(file);
+              if (index > -1) {
+                imageFiles.splice(index, 1);
+              }
+              wrapper.remove();
+              updateInputFiles();
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            previewContainer.appendChild(wrapper);
+          };
+
+          reader.readAsDataURL(file);
+        });
+
+        fileInput.value = "";
+        updateInputFiles();
+      });
+
+      function updateInputFiles() {
+        const dataTransfer = new DataTransfer();
+        imageFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+      }
+    });
+  </script>
 </head>
 <body>
-    <h2>Submit a New Order</h2>
-    <form method="POST" action="/order" enctype="multipart/form-data">
-        <label>Product Name:</label><br>
-        <input type="text" name="name" placeholder="Item Name" required><br><br>
+  <h2>Add Product</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <label>Product Name:</label>
+    <input type="text" name="name" required><br><br>
 
-        <label>Category:</label><br>
-        <input type="text" name="category" placeholder="e.g., Food & Beverages > Dairy" required><br><br>
+    <label>Category:</label>
+    <select name="category" required>
+      {% for category in categories | sort %}
+        <option value="{{ category }}">{{ category }}</option>
+      {% endfor %}
+    </select><br><br>
 
-        <label>Expiry Date (if applicable):</label><br>
-        <input type="date" name="expiry_date"><br><br>
+    <label>Quantity:</label>
+    <input type="number" name="quantity" required>
 
-        <label>Upload up to 5 images:</label><br>
-        <input type="file" name="image1"><br>
-        <input type="file" name="image2"><br>
-        <input type="file" name="image3"><br>
-        <input type="file" name="image4"><br>
-        <input type="file" name="image5"><br><br>
+    <label>Unit:</label>
+    <select name="unit" required>
+      {% for unit in units %}
+        <option value="{{ unit }}">{{ unit }}</option>
+      {% endfor %}
+    </select><br><br>
 
-        <button type="submit">Submit Order</button>
+    <label>Price:</label>
+    <input type="number" step="0.01" name="price" required><br><br>
+
+    <div id="expiryDiv" style="display: none;">
+      <label>Expiry Date:</label>
+      <input type="date" name="expiry_date"><br><br>
+    </div>
+
+    <label>Return Policy:</label>
+    <input type="text" name="return_policy"><br><br>
+
+    <label>Manufacturer Details:</label>
+    <input type="text" name="manufacturer_details"><br><br>
+
+    <label>Marketer Details:</label>
+    <input type="text" name="marketer_details"><br><br>
+
+    <label>Country of Origin:</label>
+    <input type="text" name="country_of_origin"><br><br>
+
+    <label>Customer Care:</label>
+    <input type="text" name="customer_care"><br><br>
+
+    <label>Disclaimer:</label>
+    <input type="text" name="disclaimer"><br><br>
+
+    <label>Upload Product Images (Max 5):</label>
+    <input type="file" name="images" accept="image/*" multiple><br><br>
+    <div id="imagePreview" class="preview-container"></div><br>
+
+    <button type="submit">Add Product</button>
+  </form>
+  <form action="{{ url_for('dashboard') }}" method="get">
+        <button class="return-button" type="submit">Return to Dashboard</button>
     </form>
 </body>
 </html>

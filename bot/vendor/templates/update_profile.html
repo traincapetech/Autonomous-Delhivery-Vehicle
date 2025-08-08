@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vendor Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2>Update Profile</h2>
+
+    <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
+      <div>
+        <label>Full Name:</label>
+        <input type="text" name="full_name" value="{{ vendor.get('name', '') }}" required>
+      </div>
+
+      <div>
+        <label>Username:</label>
+        <input type="text" value="{{ vendor.get('username', '') }}" disabled>
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ vendor.get('email', '') }}" required>
+      </div>
+
+      <div>
+        <label>New Password:</label>
+        <input type="password" name="password" placeholder="Leave blank to keep current password">
+      </div>
+
+      <div>
+        <label>Contact Number:</label>
+        <input type="text" name="contact" value="{{ vendor.get('contact_no', '') }}">
+      </div>
+
+      <div>
+        <label>Date of Birth:</label>
+        <input type="date" name="dob" 
+               value="{% if vendor.get('dob') %}{{ vendor['dob'][:10] }}{% endif %}">
+      </div>
+
+      <div>
+        <label>Store Name:</label>
+        <input type="text" name="store_name" value="{{ vendor.get('store_name', '') }}">
+      </div>
+
+      <div>
+        <label>Store Running From:</label>
+        <input type="date" name="store_from" 
+               value="{% if vendor.get('store_from') %}{{ vendor['store_from'][:10] }}{% endif %}">
+      </div>
+
+      <div>
+        <label>Store Address:</label>
+        <input type="text" name="store_address" value="{{ vendor.get('store_address', '') }}">
+      </div>
+
+      <div>
+        <label>Location (Coordinates/Name):</label>
+        <input type="text" name="location" value="{{ vendor.get('location', '') }}">
+      </div>
+
+      <div>
+        <label>Upload Vendor Photo:</label>
+        <input type="file" name="vendor_photo">
+        {% if vendor.get('photo') %}
+          <p>Current Photo:</p>
+          <img src="{{ url_for('static', filename=vendor['photo']) }}" width="100">
+        {% endif %}
+      </div>
+
+      <div>
+        <label>Upload Store Photo:</label>
+        <input type="file" name="store_photo">
+        {% if vendor.get('store_photo') %}
+          <p>Current Store Photo:</p>
+          <img src="{{ url_for('static', filename=vendor['store_photo']) }}" width="100">
+        {% endif %}
+      </div>
+
+      <button type="submit">Update</button>
+    </form>
+  </div>
+</body>
+</html>

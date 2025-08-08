@@ -1,0 +1,175 @@
+non_expiry_required_categories = [
+    # Automotive
+    "Automotive > Bike Accessories > Helmets",
+    "Automotive > Car Accessories > Cleaning",
+    "Automotive > Car Accessories > Seat Covers",
+    "Automotive > Tools & Equipment",
+
+    # Beauty & Personal Care (tools)
+    "Beauty & Personal Care > Tools > Hair Dryers",
+
+    # Books & Stationery
+    "Books & Stationery > Art Supplies > Paints",
+    "Books & Stationery > Books > Academic",
+    "Books & Stationery > Books > Fiction",
+    "Books & Stationery > Books > Non-Fiction",
+    "Books & Stationery > Office Supplies > Notebooks",
+
+    # Electronics
+    "Electronics > Accessories > Chargers",
+    "Electronics > Accessories > Headphones",
+    "Electronics > Accessories > Smartwatches",
+    "Electronics > Cameras",
+    "Electronics > Laptops",
+    "Electronics > Laptops > Business Laptops",
+    "Electronics > Laptops > Gaming Laptops",
+    "Electronics > Mobiles",
+    "Electronics > Mobiles > Accessories",
+    "Electronics > Mobiles > Smartphones",
+    "Electronics > Tablets",
+
+    # Fashion
+    "Fashion > Accessories > Bags",
+    "Fashion > Accessories > Jewelry",
+    "Fashion > Accessories > Sunglasses",
+    "Fashion > Kids > Boys Clothing",
+    "Fashion > Kids > Girls Clothing",
+    "Fashion > Men > Bottoms",
+    "Fashion > Men > Footwear",
+    "Fashion > Men > Tops",
+    "Fashion > Women > Bottoms",
+    "Fashion > Women > Dresses",
+    "Fashion > Women > Footwear",
+    "Fashion > Women > Tops",
+
+    # Home & Kitchen (mostly non-consumable)
+    "Home & Kitchen",
+    "Home & Kitchen > Appliances > Irons",
+    "Home & Kitchen > Appliances > Vacuum Cleaners",
+    "Home & Kitchen > Appliances > Water Purifiers",
+    "Home & Kitchen > Bedding > Bedsheets",
+    "Home & Kitchen > Bedding > Blankets & Comforters",
+    "Home & Kitchen > Bedding > Pillows",
+    "Home & Kitchen > Cookware > Cookware Sets",
+    "Home & Kitchen > Cookware > Pressure Cookers",
+    "Home & Kitchen > Decor > Clocks",
+    "Home & Kitchen > Decor > Curtains & Accessories",
+    "Home & Kitchen > Decor > Lighting",
+    "Home & Kitchen > Decor > Wall Art",
+    "Home & Kitchen > Dining > Dinner Sets",
+    "Home & Kitchen > Dining > Glassware",
+    "Home & Kitchen > Dining > Serveware",
+    "Home & Kitchen > Kitchen Appliances",
+    "Home & Kitchen > Kitchen Appliances > Blenders",
+    "Home & Kitchen > Kitchen Appliances > Microwaves",
+    "Home & Kitchen > Storage > Organizers",
+    "Home & Kitchen > Storage > Racks & Shelves",
+    "Home & Kitchen > Tools > Cleaning Tools",
+    "Home & Kitchen > Tools > Hardware & Repair",
+
+    # Pet Supplies (non-food items)
+    "Pet Supplies > Dogs > Toys",
+    "Pet Supplies > Fish & Aquatics > Tanks",
+
+    # Sports & Outdoors
+    "Sports & Outdoors > Camping > Tents",
+    "Sports & Outdoors > Cycling > Bicycles",
+    "Sports & Outdoors > Cycling > Helmets",
+    "Sports & Outdoors > Fitness > Dumbbells",
+    "Sports & Outdoors > Fitness > Yoga Mats",
+    "Sports & Outdoors > Sportswear > Men",
+    "Sports & Outdoors > Sportswear > Women",
+
+    # Toys & Baby Products
+    "Toys & Baby Products > Baby Gear > Car Seats",
+    "Toys & Baby Products > Baby Gear > Strollers",
+    "Toys & Baby Products > Toys > Action Figures",
+    "Toys & Baby Products > Toys > Educational"
+]
+
+
+
+expiry_required_categories = [
+    # Beauty & Personal Care
+    "Beauty & Personal Care > Fragrances > Perfume",
+    "Beauty & Personal Care > Hair Care > Shampoos",
+    "Beauty & Personal Care > Hair Care > Styling",
+    "Beauty & Personal Care > Makeup > Eyes",
+    "Beauty & Personal Care > Makeup > Lips",
+    "Beauty & Personal Care > Skincare > Moisturizers",
+    "Beauty & Personal Care > Skincare > Serums",
+
+    # Food (prepared meals & beverages)
+    "Food > Breads > Naan",
+    "Food > Breads > Paratha",
+    "Food > Breads > Puri",
+    "Food > Chinese > Chow Mein",
+    "Food > Chinese > Fried Rice",
+    "Food > Chinese > Manchurian",
+    "Food > Desserts > Gulab Jamun",
+    "Food > Desserts > Ice Cream",
+    "Food > Desserts > Rasgulla",
+    "Food > North Indian > Dal Tadka",
+    "Food > North Indian > Paneer Butter Masala",
+    "Food > North Indian > Rajma Chawal",
+    "Food > Snacks & Street Food > Chaat",
+    "Food > Snacks & Street Food > Pakora",
+    "Food > Snacks & Street Food > Samosa",
+    "Food > South Indian > Dosa",
+    "Food > South Indian > Idli",
+    "Food > South Indian > Medu Vada",
+    "Food > South Indian > Upma",
+    "Food > Thali > Mini Thali",
+    "Food > Thali > Veg Thali",
+    "Food > Thali > Combo Meals",
+    "Food > Beverages > Lassi",
+    "Food > Beverages > Masala Chai",
+    "Food > Beverages > Soft Drinks",
+    "Food > Beverages > Tea & Coffee",
+
+    # Grocery
+    "Grocery > Beverages > Juices",
+    "Grocery > Beverages > Soft Drinks",
+    "Grocery > Beverages > Tea & Coffee",
+    "Grocery > Breakfast Items > Cereals",
+    "Grocery > Breakfast Items > Jam & Spreads",
+    "Grocery > Breakfast Items > Oats & Muesli",
+    "Grocery > Canned & Packaged Food > Canned Vegetables",
+    "Grocery > Canned & Packaged Food > Instant Noodles",
+    "Grocery > Canned & Packaged Food > Ready to Eat Meals",
+    "Grocery > Dairy > Butter & Cheese",
+    "Grocery > Dairy > Milk",
+    "Grocery > Dairy > Yogurt & Curd",
+    "Grocery > Food Staples > Atta, Flour & Sooji",
+    "Grocery > Food Staples > Lentils & Pulses",
+    "Grocery > Food Staples > Oil & Ghee",
+    "Grocery > Food Staples > Rice & Grains",
+    "Grocery > Food Staples > Salt, Sugar & Jaggery",
+    "Grocery > Organic Products",
+    "Grocery > Snacks > Biscuits & Cookies",
+    "Grocery > Snacks > Chips & Crackers",
+    "Grocery > Snacks > Chocolates",
+    "Grocery > Snacks > Dry Fruits & Nuts",
+    "Grocery > Spices & Masalas",
+    "Grocery > Staples > Baking Essentials",
+
+    # Grocery > Personal Care
+    "Grocery > Personal Care > Bath & Body",
+    "Grocery > Personal Care > Oral Care",
+    "Grocery > Personal Care > Sanitary Needs",
+
+    # Grocery > Household Supplies (some chemical-based)
+    "Grocery > Household Supplies > Cleaning Tools",
+    "Grocery > Household Supplies > Detergents",
+    "Grocery > Household Supplies > Dishwashing",
+    "Grocery > Household Supplies > Paper & Disposables",
+
+    # Pet Supplies
+    "Pet Supplies > Cats > Food",
+    "Pet Supplies > Cats > Litter",
+    "Pet Supplies > Dogs > Food",
+
+    # Toys & Baby Products
+    "Toys & Baby Products > Diapers & Wipes",
+    "Toys & Baby Products > Feeding > Bottles"
+]

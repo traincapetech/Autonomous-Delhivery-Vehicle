@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Product</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    form { max-width: 600px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button {
+      margin-top: 15px; padding: 10px 15px;
+      background-color: #007bff; color: white;
+      border: none; border-radius: 4px; cursor: pointer;
+    }
+    button:hover { background-color: #0056b3; }
+
+    .image-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .image-wrapper { position: relative; display: inline-block; }
+    .image-wrapper img { width: 120px; border: 1px solid #aaa; border-radius: 4px; }
+    .remove-btn {
+      position: absolute; top: -8px; right: -8px;
+      background: red; color: white; border: none;
+      border-radius: 50%; width: 20px; height: 20px;
+      font-size: 14px; line-height: 18px; cursor: pointer;
+    }
+    .return-button {
+      background-color: #28a745;
+    }
+    .return-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>Edit Product</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    <label>Name:</label>
+    <input type="text" name="name" value="{{ product.name }}" required />
+
+    <label>Category:</label>
+    <select name="category" id="categorySelect" required>
+      {% set categories = [
+        "Food (Restaurant food, bakery, snacks, thalis, sweets, etc.)",
+        "Grocery (Dairy, Spices, Packaged Food, Oils, Beverages, etc.)",
+        "Beauty & Personal Care (All topical and ingestible products)",
+        "Pet Food & Litter",
+        "Household Cleaning Supplies"
+      ] %}
+      {% for cat in categories %}
+        <option value="{{ cat }}" {% if product.category == cat %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Quantity:</label>
+    {% set quantity_parts = product.quantity_with_unit.split() %}
+    <input type="number" step="1" name="quantity" value="{{ quantity_parts[0] }}" required />
+
+    <label>Unit:</label>
+    <select name="unit" required>
+      {% for unit in ['kg', 'liter', 'dozen', 'piece'] %}
+        <option value="{{ unit }}" {% if quantity_parts[1] == unit %}selected{% endif %}>{{ unit }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Price:</label>
+    <input type="number" step="0.01" name="price" value="{{ product.price }}" required />
+
+    <div id="expiryField">
+      <label>Expiry Date:</label>
+      <input type="date" name="expiry_date" value="{{ product.expiry_date }}">
+    </div>
+
+    <label>Return Policy:</label>
+    <textarea name="return_policy">{{ product.return_policy }}</textarea>
+
+    <label>Manufacturer Details:</label>
+    <textarea name="manufacturer_details">{{ product.manufacturer_details }}</textarea>
+
+    <label>Marketer Details:</label>
+    <textarea name="marketer_details">{{ product.marketer_details }}</textarea>
+
+    <label>Country of Origin:</label>
+    <input type="text" name="country_of_origin" value="{{ product.country_of_origin }}" />
+
+    <label>Customer Care:</label>
+    <input type="text" name="customer_care" value="{{ product.customer_care }}" />
+
+    <label>Disclaimer:</label>
+    <textarea name="disclaimer">{{ product.disclaimer }}</textarea>
+
+    {% if product.image_paths %}
+      <label>Current Images:</label>
+      <div class="image-container">
+        {% for path in product.image_paths %}
+          <div class="image-wrapper">
+            <img src="{{ url_for('static', filename='uploads/' ~ path) }}">
+            <form method="POST" action="{{ url_for('delete_product_image', product_id=product._id, image_filename=path) }}">
+              <button type="submit" class="remove-btn">&times;</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <label>Upload New Images (you can upload multiple):</label>
+    <input type="file" name="images" accept="image/*" multiple />
+
+    <button type="submit">Update Product</button>
+  </form>
+
+  <form action="{{ url_for('dashboard') }}" method="get">
+    <button class="return-button" type="submit">Return to Dashboard</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const expiryRequired = new Set([
+        "Grocery (Dairy, Spices, Packaged Food, Oils, Beverages, etc.)",
+        "Beauty & Personal Care (All topical and ingestible products)",
+        "Pet Food & Litter",
+        "Household Cleaning Supplies"
+      ]);
+
+      const categorySelect = document.getElementById("categorySelect");
+      const expiryField = document.getElementById("expiryField");
+
+      function toggleExpiryField() {
+        const selected = categorySelect.value;
+        if (expiryRequired.has(selected)) {
+          expiryField.style.display = "block";
+        } else {
+          expiryField.style.display = "none";
+        }
+      }
+
+      toggleExpiryField(); // initial check
+      categorySelect.addEventListener("change", toggleExpiryField);
+    });
+  </script>
+</body>
+</html>

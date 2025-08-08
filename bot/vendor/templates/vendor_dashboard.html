@@ -1,23 +1,194 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Vendor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation bar */
+        .nav {
+            margin-bottom: 20px;
+        }
+
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .logout-button {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+
+        .nav a {
+            text-decoration: none;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .nav a:hover {
+            background-color: #0056b3;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-button img {
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            object-fit: cover;
+            transition: transform 0.2s;
+        }
+
+        .profile-button img:hover {
+            transform: scale(1.05);
+        }
+
+
+        .filter-bar {
+            margin-bottom: 20px;
+        }
+
+        .filter-bar a {
+            text-decoration: none;
+            margin-right: 10px;
+            padding: 6px 10px;
+            border: 1px solid #007bff;
+            color: #007bff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .filter-bar a.active,
+        .filter-bar a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .product h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .product img {
+            margin-top: 10px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+
+        .edit-button {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .edit-button:hover {
+            background-color: #1e7e34;
+        }
+
+        .product p {
+            margin: 6px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Inventory</h1>
-    <a href="/add_product_page">Add New Product</a> |
-    <a href="/login_page">Logout</a>
 
-    <table border="1">
-        <tr><th>Name</th><th>Quantity</th><th>Unit</th><th>Price</th></tr>
-        {% for product in inventory %}
-        <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ product.quantity }}</td>
-            <td>{{ product.unit }}</td>
-            <td>{{ product.price }}</td>
-        </tr>
+    <div class="nav">
+        <div class="nav-header">
+            <h1>Vendor Dashboard</h1>
+            <div class="navbar-right">
+                {% if vendor and vendor.photo %}
+                    <a href="{{ url_for('update_profile') }}" class="profile-button">
+                        <img src="{{ url_for('static', filename=vendor.photo) }}" alt="Profile" width="40" height="40">
+                    </a>
+
+                {% endif %}
+                <a class="logout-button" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+        <a href="{{ url_for('add_product') }}">Add Product</a>
+    </div>
+
+
+    <div class="filter-bar">
+        <strong>Filter:</strong>
+        <a href="{{ url_for('dashboard') }}" class="{% if not selected_filter %}active{% endif %}">All</a>
+        <a href="{{ url_for('dashboard', filter='Food') }}" class="{% if selected_filter == 'Food' %}active{% endif %}">Food</a>
+        <a href="{{ url_for('dashboard', filter='Grocery') }}" class="{% if selected_filter == 'Grocery' %}active{% endif %}">Grocery</a>
+        <a href="{{ url_for('dashboard', filter='Beauty & Personal Care') }}" class="{% if selected_filter == 'Beauty & Personal Care' %}active{% endif %}">Beauty & Personal Care</a>
+        <a href="{{ url_for('dashboard', filter='Pet Food & Litter') }}" class="{% if selected_filter == 'Pet Food & Litter' %}active{% endif %}">Pet Food & Litter</a>
+        <a href="{{ url_for('dashboard', filter='Household Cleaning Supplies') }}" class="{% if selected_filter == 'Household Cleaning Supplies' %}active{% endif %}">Cleaning Supplies</a>
+    </div>
+
+    <h2>Your Products{% if selected_filter %} - {{ selected_filter }}{% endif %}:</h2>
+
+    {% if products|length == 0 %}
+        <p>No products found in this category.</p>
+    {% else %}
+        {% for product in products %}
+            <div class="product">
+                <h3>{{ product.name | capitalize }} - ₹{{ product.price }}</h3>
+                <p><strong>Category:</strong> {{ product.category }}</p>
+
+                {% if product.quantity_with_unit %}
+                    <p><strong>Quantity:</strong> {{ product.quantity_with_unit }}</p>
+                {% endif %}
+
+                {% if product.expiry_date %}
+                    <p><strong>Expiry Date:</strong> {{ product.expiry_date }}</p>
+                {% endif %}
+
+                {% if product.image_paths and product.image_paths[0] %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ product.image_paths[0]) }}" alt="{{ product.name }}" width="150">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+
+                <br>
+                <a class="edit-button" href="{{ url_for('edit_product', product_id=product._id|string) }}">Edit</a>
+            </div>
         {% endfor %}
-    </table>
+    {% endif %}
+
 </body>
 </html>
