@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px;}
+        table {width: 100%; border-collapse: collapse; margin-bottom: 30px;}
+        th, td {border: 1px solid #ddd; padding: 10px; text-align: left;}
+        th {background: #333; color: #fff;}
+        h2 {margin-top: 40px; color: #333;}
+        .status-online {color: green; font-weight: bold;}
+        .status-offline {color: red; font-weight: bold;}
+        .btn {padding: 6px 12px; background: #667eea; color: #fff; border: none; border-radius: 4px; text-decoration: none; cursor: pointer;}
+        .btn:hover {background: #5563c1;}
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <h2>Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Location</th>
+                <th>Orders</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user._id }}</td>
+                <td>{{ user.username or 'N/A' }}</td>
+                <td>{{ user.name or 'N/A' }}</td>
+                <td>{{ user.email or 'N/A' }}</td>
+                <td>{{ user.contact_no or 'N/A' }}</td>
+                <td>{{ user.location or 'N/A' }}</td>
+                <td><a class="btn" href="/orders_page?user_id={{ user._id }}">Show Orders</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Vendors</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Vendor ID</th>
+                <th>Store Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Location</th>
+                <th>Orders</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendor in vendors %}
+            <tr>
+                <td>{{ vendor._id }}</td>
+                <td>{{ vendor.store_name or 'N/A' }}</td>
+                <td>{{ vendor.email or 'N/A' }}</td>
+                <td>{{ vendor.contact_no or 'N/A' }}</td>
+                <td>{{ vendor.store_location or 'N/A' }}</td>
+                <td><a class="btn" href="/orders_page?vendor_id={{ vendor._id }}">Show Orders</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Robots</h2>
+    <table id="robots-table">
+        <thead>
+            <tr>
+                <th>Robot ID</th>
+                <th>Device ID</th>
+                <th>Online Status</th>
+                <th>Working Status</th>
+                <th>Battery</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for robot in robots %}
+            <tr>
+                <td>{{ robot._id }}</td>
+                <td>{{ robot.device_id or 'N/A' }}</td>
+                <td class="{{ 'status-online' if robot.online else 'status-offline' }}">{{ 'Online' if robot.online else 'Offline' }}</td>
+                <td>{{ robot.working_status }}</td>
+                <td>{{ robot.battery_level or 0 }}%</td>
+                <td>{{ robot.current_latitude or 'N/A' }}</td>
+                <td>{{ robot.current_longitude or 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Orders</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User Name</th>
+                <th>Vendor Name</th>
+                <th>Status</th>
+                <th>Assigned Robot</th>
+                <th>Payment Status</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order._id }}</td>
+                <td>{{ order.user_name or 'N/A' }}</td>
+                <td>{{ order.vendor_name or 'N/A' }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.assigned_robot or 'None' }}</td>
+                <td>{{ order.payment_status }}</td>
+                <td>${{ order.total_amount or 0 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<script>
+async function refreshRobots() {
+    const res = await fetch("/robots_status");
+    const robots = await res.json();
+    const tbody = document.querySelector("#robots-table tbody");
+    tbody.innerHTML = "";
+    robots.forEach(robot => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${robot._id}</td>
+            <td>${robot.device_id || 'N/A'}</td>
+            <td class="${robot.online ? 'status-online' : 'status-offline'}">
+                ${robot.online ? 'Online' : 'Offline'}
+            </td>
+            <td>${robot.working_status}</td>
+            <td>${robot.battery_level || 0}%</td>
+            <td>${robot.current_latitude || 'N/A'}</td>
+            <td>${robot.current_longitude || 'N/A'}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+setInterval(refreshRobots, 10000);
+refreshRobots();
+</script>
+</body>
+</html>

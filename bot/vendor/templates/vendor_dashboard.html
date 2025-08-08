@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vendor Dashboard</title>
+</head>
+<body>
+    <h1>Your Inventory</h1>
+    <a href="/add_product_page">Add New Product</a> |
+    <a href="/login_page">Logout</a>
+
+    <table border="1">
+        <tr><th>Name</th><th>Quantity</th><th>Unit</th><th>Price</th></tr>
+        {% for product in inventory %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.unit }}</td>
+            <td>{{ product.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

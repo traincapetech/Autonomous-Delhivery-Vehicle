@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Shortest Route</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        #infoBox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Click on Map to Set Destination</h1>
+    <div id="map"></div>
+
+    <div id="infoBox">Click on the map to select a destination</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        const start = [28.6076646, 77.0823103]; // # 28.6076646,77.0823103
+
+        const map = L.map('map').setView(start, 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker(start).addTo(map).bindPopup("Robot Start").openPopup();
+
+        let routeLayer = null;
+        let destMarker = null;
+        const infoBox = document.getElementById('infoBox');
+
+        async function fetchRoute(lat, lng) {
+            const response = await fetch('/route', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat: lat, lng: lng })
+            });
+            return await response.json();
+        }
+
+        map.on('click', async (e) => {
+            const destLat = e.latlng.lat;
+            const destLng = e.latlng.lng;
+
+            if (routeLayer) map.removeLayer(routeLayer);
+            if (destMarker) map.removeLayer(destMarker);
+
+            destMarker = L.marker([destLat, destLng]).addTo(map).bindPopup("Destination").openPopup();
+
+            const data = await fetchRoute(destLat, destLng);
+
+            if (data.error) {
+                infoBox.innerHTML = "Route calculation failed.";
+                return;
+            }
+
+            const path = data.path;
+            const durationMin = data.duration_min;
+            const distanceKm = data.distance_km;
+
+            infoBox.innerHTML = `<b>Distance:</b> ${distanceKm} km<br><b>ETA (Robot @50km/h):</b> ${durationMin} min`;
+
+            routeLayer = L.polyline(path, { color: 'blue', weight: 5 }).addTo(map);
+            map.fitBounds(routeLayer.getBounds());
+        });
+    </script>
+</body>
+</html>

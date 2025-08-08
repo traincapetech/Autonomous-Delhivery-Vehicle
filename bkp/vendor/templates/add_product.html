@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <h2>Add Product</h2>
+    <form method="POST" action="/product">
+        <input type="text" name="name" placeholder="Product Name" required><br>
+        <input type="number" name="quantity" placeholder="Quantity" required><br>
+        <input type="text" name="unit" placeholder="Unit (kg, L, pcs)" required><br>
+        <input type="number" name="price" placeholder="Price" required><br>
+        <input type="date" name="expiry_date" placeholder="Expiry Date" required><br>
+        <input type="text" name="return_policy" placeholder="Return Policy"><br>
+        <input type="text" name="manufacturer_details" placeholder="Manufacturer"><br>
+        <input type="text" name="marketer_details" placeholder="Marketer"><br>
+        <input type="text" name="country_of_origin" placeholder="Country of Origin"><br>
+        <input type="text" name="customer_care" placeholder="Customer Care"><br>
+        <input type="text" name="disclaimer" placeholder="Disclaimer"><br>
+        <button type="submit">Add Product</button>
+    </form>
+</body>
+</html>

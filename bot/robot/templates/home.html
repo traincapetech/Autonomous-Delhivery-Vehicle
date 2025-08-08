@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Registration</title>
+    <script>
+        async function fetchDeviceInfo() {
+            // Get location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                });
+            }
+
+            // Get battery info
+            if (navigator.getBattery) {
+                const battery = await navigator.getBattery();
+                document.getElementById('battery_percent').value = Math.round(battery.level * 100);
+            }
+        }
+        window.onload = fetchDeviceInfo;
+    </script>
+</head>
+<body>
+    <h2>Device Registration</h2>
+    <form action="/register" method="POST">
+        <label for="device_id">Device ID:</label>
+        <input type="text" id="device_id" name="device_id" required><br><br>
+
+        <label for="os">Operating System:</label>
+        <input type="text" id="os" name="os" value="{{ device_info['os'] }}" readonly><br><br>
+
+        <label for="os_version">OS Version:</label>
+        <input type="text" id="os_version" name="os_version" value="{{ device_info['os_version'] }}" readonly><br><br>
+
+        <label for="mac_address">MAC Address:</label>
+        <input type="text" id="mac_address" name="mac_address" value="{{ device_info['mac_address'] }}" readonly><br><br>
+
+        <label for="ip_address">IP Address:</label>
+        <input type="text" id="ip_address" name="ip_address" value="{{ device_info['ip_address'] }}" readonly><br><br>
+
+        <!-- Hidden fields for location and battery -->
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+        <input type="hidden" id="battery_percent" name="battery_percent">
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

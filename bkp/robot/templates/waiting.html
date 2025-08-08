@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiting for Order</title>
+</head>
+<body>
+    <h1>✅ Device Registered</h1>
+    <h2>Waiting for Order...</h2>
+    <p>OS: {{ device_info.os }} {{ device_info.os_version }}</p>
+    <p>IP: {{ device_info.ip_address }}</p>
+    <p>MAC: {{ device_info.mac_address }}</p>
+    <p>Location: {{ device_info.latitude }}, {{ device_info.longitude }}</p>
+    <p>Battery: {{ device_info.battery_percent }}%</p>
+</body>
+</html>
